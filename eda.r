@@ -4,6 +4,7 @@ library(ggmap)
 library(corrplot)
 library(tidyr)
 library(dplyr)
+library(caTools)
 
 df <- read.csv('kc_house_data_original.csv', header = T)
 
@@ -45,7 +46,21 @@ ggplot(df, aes(x = price)) +
   geom_histogram(bins = 50, alpha = .5, fill = 'blue') + 
   theme_minimal()
 
+#test train split
+set.seed(101)
+sample <- sample.split(df$price,SplitRatio = .7)
+train <- subset(df, sample == T)
+test <- subset(df, sample == F)
 
+#build the first basic model
+model <- lm(price ~ ., train)
+summary(model)
+
+price.pred <- predict(model, test)
+results <- cbind(price.pred, test$price)
+results <- as.data.frame(results)
+colnames(results) <- c('Prediction','Actual')
+mse <- mean((results$Actual - results$Prediction)^2)
 
 
 
