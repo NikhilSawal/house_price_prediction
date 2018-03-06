@@ -84,7 +84,19 @@ results <- as.data.frame(results)
 colnames(results) <- c('Prediction','Actual')
 mse <- mean((results$Actual - results$Prediction)^2)
 
- 
+#Function for residual plot distribution
+model.residuals <- function(mod){
+  
+  res <- residuals(mod)
+  res <- as.data.frame(res)
+  
+  print(ggplot(res, aes(res)) + 
+    geom_histogram(fill = 'blue', alpha = .5, bins = 40) +
+    scale_x_continuous(labels = scales::comma))
+  print(plot(mod))
+  
+}
 
+model.residuals(model)
 
 
