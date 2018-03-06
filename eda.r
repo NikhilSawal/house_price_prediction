@@ -27,7 +27,8 @@ df$junk <- NULL
 df$date <- as.Date(df$date, format = "%Y%m%d")
 
 # # added a feature for Month
-# df$month <- sapply(df$date, function(x){format(x,"%B, %Y")})
+# df$month <- sapply(df$date, function(x){format(x,"%m")})
+# df$month <- as.integer(df$month)
 
 # # Make waterfront a Nominal variable
 # df$waterfront <- as.factor(df$waterfront)
@@ -37,7 +38,9 @@ df$date <- as.Date(df$date, format = "%Y%m%d")
 
 # Box plot for waterfront vs. house prices
 ggplot(df, aes(x = as.factor(df$waterfront), y = df$price)) + 
-  geom_boxplot(aes(fill = df$waterfront)) +
+  geom_boxplot(aes(fill = as.factor(df$waterfront))) +
+  labs(x = "Waterfront", y = "House Prices") +
+  scale_y_continuous(labels = scales::comma) +
   theme_bw()
 
 # Visualize the houses sold with google maps
@@ -49,17 +52,20 @@ ggmap(my_map) +
 
 # Make the correlation matrix
 num.col <- sapply(df, is.numeric)
-cor.data <- cor(df[,num.col])
+cor.data <- round(cor(df[,num.col]),2)
 
 # correlation plot for numerical variables
-corrplot(cor.data, method = 'color')
+corrplot(cor.data, method = 'number')
 
-corrgram(df, order = T, lower.panel = panel.shade, upper.panel = panel.pie, 
+corrgram(df, order = T, lower.panel = panel.shade, upper.panel = panel.conf, 
          text.panel = panel.txt)
 
 # plots the distribution of the prices
-ggplot(df, aes(x = price)) + 
-  geom_histogram(bins = 50, alpha = .5, fill = 'blue') + 
+ggplot(df, aes(x = df$price)) + 
+  geom_histogram(aes(fill = as.factor(df$waterfront)), color = 'black', bins = 50 ,alpha = .7) + 
+  scale_x_continuous(labels = scales::comma) +
+  scale_fill_manual(values = c('#ae4554','#faf7ea')) +
+  labs(x = 'Price') +
   theme_minimal()
 
 #test train split
