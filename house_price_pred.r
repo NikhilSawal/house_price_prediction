@@ -85,7 +85,7 @@ colnames(results) <- c('Prediction','Actual')
 mse <- mean((results$Actual - results$Prediction)^2)
 
 #Function for residual plot distribution
-model.residuals <- function(mod){
+model_residual_plots <- function(mod){
   
   res <- residuals(mod)
   res <- as.data.frame(res)
