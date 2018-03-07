@@ -100,4 +100,10 @@ model_residual_plots <- function(mod){
 
 model.residuals(model)
 
-
+#Normalize data
+maxs <- apply(df[,-1], 2, max)
+mins <- apply(df[,-1], 2, min)
+scaled.data <- scale(df[,-1], center = mins, scale = maxs - mins)
+scaled.data <- as.data.frame(scaled.data)
+scaled.data <- cbind(df$date, scaled.data)
+names(scaled.data)[1] <- paste("date")
