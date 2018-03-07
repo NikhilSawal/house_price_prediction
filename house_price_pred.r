@@ -30,8 +30,9 @@ df$date <- as.Date(df$date, format = "%Y%m%d")
 # df$month <- sapply(df$date, function(x){format(x,"%m")})
 # df$month <- as.integer(df$month)
 
-# # Make waterfront a Nominal variable
-# df$waterfront <- as.factor(df$waterfront)
+# Make waterfront a Nominal variable and remove id
+df$waterfront <- as.factor(df$waterfront)
+df <- df[, -1]
 
 ######
 #Plots
