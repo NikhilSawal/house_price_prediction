@@ -69,6 +69,9 @@ ggplot(df, aes(x = df$price)) +
   labs(x = 'Price') +
   theme_minimal()
 
+# Model 1
+#
+#
 #test train split
 set.seed(101)
 sample <- sample.split(df$price,SplitRatio = .7)
@@ -80,10 +83,16 @@ model <- lm(price ~ ., train)
 summary(model)
 
 price.pred <- predict(model, test)
-results <- cbind(price.pred, test$price)
-results <- as.data.frame(results)
-colnames(results) <- c('Prediction','Actual')
-mse <- mean((results$Actual - results$Prediction)^2)
+
+# Function that calculate MSE
+calc.mse <- function(predictions, test){
+  results <- cbind(predictions, test$price)
+  results <- as.data.frame(results)
+  colnames(results) <- c('Prediction','Actual')
+  return(paste0("MSE is: ",mean((results$Actual - results$Prediction)^2)))
+}
+
+calc.mse(price.pred, test)
 
 #Function for residual plot distribution
 model_residual_plots <- function(mod){
@@ -98,7 +107,7 @@ model_residual_plots <- function(mod){
   
 }
 
-model.residuals(model)
+model_residual_plots(model)
 
 #Normalize data
 maxs <- apply(df[,-1], 2, max)
