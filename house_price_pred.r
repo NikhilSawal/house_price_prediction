@@ -94,7 +94,7 @@ calc.mse <- function(predictions, test){
 
 calc.mse(price.pred, test)
 
-#Function for residual plot distribution
+#Function for model adequecy checking
 model_residual_plots <- function(mod){
   
   res <- residuals(mod)
@@ -103,6 +103,7 @@ model_residual_plots <- function(mod){
   print(ggplot(res, aes(res)) + 
     geom_histogram(fill = 'blue', alpha = .5, bins = 40) +
     scale_x_continuous(labels = scales::comma))
+  print(plot(res))
   print(plot(mod))
   
 }
